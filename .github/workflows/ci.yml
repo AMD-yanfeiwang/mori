@@ -282,6 +282,13 @@ jobs:
             cd $GITHUB_WORKSPACE && timeout 60 pytest tests/python/test_tuning_config_quant_types.py -v
           "
 
+      - name: MORI JIT (atomic cache publish, CPU)
+        if: contains(fromJSON(needs.scope.outputs.groups), 'ep')
+        run: |
+          $CT exec -e PYTHONPATH=$GITHUB_WORKSPACE $CONTAINER bash -c "
+            cd $GITHUB_WORKSPACE && timeout 60 pytest tests/python/jit/test_atomic_output.py -v
+          "
+
       - name: MORI-EP bench
         if: contains(fromJSON(needs.scope.outputs.groups), 'ep')
         run: |
