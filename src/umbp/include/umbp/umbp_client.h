@@ -129,6 +129,12 @@ class IUMBPClient {
   /// recent.  Returns the copies moved; 0 where unsupported.
   virtual size_t BatchTouch(const std::vector<std::string>& /*keys*/) { return 0; }
 
+  /// Drop objects the caller knows it will not read again, so their bytes
+  /// stop counting against the store before eviction would reach them.  Keys
+  /// not stored are skipped, and an object being read or copied is kept.
+  /// Returns the objects dropped; 0 where unsupported.
+  virtual size_t BatchRemove(const std::vector<std::string>& /*keys*/) { return 0; }
+
   // ---- Lifecycle ----
 
   /// Remove all stored entries.  Returns true when the empty state is

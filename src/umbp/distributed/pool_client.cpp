@@ -4878,6 +4878,15 @@ size_t PoolClient::BatchTouch(const std::vector<std::string>& keys) {
   return default_pool_->BatchTouch(keys);
 }
 
+size_t PoolClient::BatchRemove(const std::vector<std::string>& keys) {
+  if (!initialized_ || keys.empty() || default_pool_ == nullptr) return 0;
+  size_t removed = 0;
+  for (const auto& result : default_pool_->Evict(keys, PoolEvictMode::kDiscard)) {
+    if (result.bytes_freed > 0) ++removed;
+  }
+  return removed;
+}
+
 // ---------------------------------------------------------------------------
 //  External KV
 // ---------------------------------------------------------------------------
